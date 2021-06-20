@@ -113,7 +113,7 @@ client.on("message", async (msg) => {
 
     const initialiseCategory = async (category) => {
       const scoreboard = await startGame(msg, category);
-      let scoreboardReply = "```End of Round- \n ";
+      let scoreboardReply = "```End of Round \n ";
       for (var player of Object.keys(scoreboard)) {
         scoreboardReply += String(player + " : " + scoreboard[player] + "\n");
       }

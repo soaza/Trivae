@@ -1,9 +1,6 @@
 const { clearInterval } = require("timers");
 
-let players = {
-  player1: 999,
-  player2: 111,
-};
+let players = {};
 
 const addPlayerScore = (username) => {
   if (players[username]) {
@@ -24,6 +21,9 @@ const parsedHint = (hint) => {
 
 const playerResponse = (client, correct_answer, msg, resolve) => {
   correct_answer = String(correct_answer);
+  console.log(correct_answer);
+
+  let solved = false;
   let refreshIntervalId = 0;
   let hint = correct_answer.replace(/[a-z]/g, "_").replace(/[A-Z]/g, "_");
 
@@ -42,17 +42,20 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
     } else {
       msg.channel.send(`Time's up! Answer is ${correct_answer}`);
       clearInterval(refreshIntervalId);
-      return resolve("Done");
     }
   };
 
   client.on("message", async (msg) => {
+    if (solved) return resolve("Done");
+
     if (msg.author.bot) {
     }
     // Skip
     if (msg.content === "skip") {
       msg.channel.send("Question skipped!");
       clearInterval(refreshIntervalId);
+      solved = true;
+
       return resolve("Done");
     }
     // Correct Answer
@@ -62,9 +65,11 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
       addPlayerScore(msg.author.username);
       msg.channel.send(`${msg.author.username} got it correct!`);
       clearInterval(refreshIntervalId);
+      solved = true;
       return resolve("Done");
     }
   });
+
   refreshIntervalId = setInterval(() => giveHints(correct_answer), 5000);
 };
 
