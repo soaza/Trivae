@@ -1,12 +1,25 @@
 const { clearInterval } = require("timers");
 
+let players = {
+  player1: 999,
+  player2: 111,
+};
+
+const addPlayerScore = (username) => {
+  if (players[username]) {
+    players[username] += 1;
+  } else {
+    players[username] = 1;
+  }
+};
+
 function setCharAt(str, index, chr) {
   if (index > str.length - 1) return str;
   return str.substring(0, index) + chr + str.substring(index + 1);
 }
 
 const parsedHint = (hint) => {
-  return hint.replace(/_/g, " - ");
+  return hint.replace(/_/g, "-");
 };
 
 const playerResponse = (client, correct_answer, msg, resolve) => {
@@ -36,8 +49,18 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
   client.on("message", async (msg) => {
     if (msg.author.bot) {
     }
+    // Skip
     if (msg.content === "skip") {
       msg.channel.send("Question skipped!");
+      clearInterval(refreshIntervalId);
+      return resolve("Done");
+    }
+    // Correct Answer
+    if (
+      String(msg.content).toLowerCase() === String(correct_answer).toLowerCase()
+    ) {
+      addPlayerScore(msg.author.username);
+      msg.channel.send(`${msg.author.username} got it correct!`);
       clearInterval(refreshIntervalId);
       return resolve("Done");
     }
@@ -47,4 +70,5 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
 
 module.exports = {
   playerResponse,
+  players,
 };
