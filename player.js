@@ -1,3 +1,4 @@
+const { time } = require("console");
 const { clearInterval } = require("timers");
 
 let players = {};
@@ -20,28 +21,46 @@ const parsedHint = (hint) => {
 };
 
 const playerResponse = (client, correct_answer, msg, resolve) => {
+  let timeLeft = 60;
   correct_answer = String(correct_answer);
-  console.log(correct_answer);
 
   let solved = false;
-  let refreshIntervalId = 0;
   let hint = correct_answer.replace(/[a-z]/g, "_").replace(/[A-Z]/g, "_");
 
-  let count = 0;
-  let noHints = correct_answer.length - 2;
+  var blankIndices = [];
+  for (var i = 0; i < correct_answer.length; i++) {
+    if (correct_answer[i] === " ") blankIndices.push(i);
+  }
+  console.log("blank", blankIndices);
+  //   we use this array to keep track of un-revealed characters
+  let hintIndexArr = Array.from(Array(correct_answer.length).keys());
+  //   remove all indices which has underscore
+  if (blankIndices.length > 0) {
+    for (var i = 0; i < blankIndices.length; i++) {
+      const indexToRemove = hintIndexArr.indexOf(blankIndices[i]);
+      hintIndexArr.splice(indexToRemove, 1);
+    }
+  }
 
   const giveHints = (correct_answer) => {
-    if (count < noHints) {
-      var index = Math.floor(Math.random() * count) + count; //generate new index
-
-      if (hint[index] === "_") {
-        hint = setCharAt(hint, index, correct_answer[index]);
+    console.log("hintArr", hintIndexArr);
+    if (hintIndexArr.length > 0) {
+      var index = Math.floor(Math.random() * hintIndexArr.length); //generate new index
+      console.log(index);
+      if (hint[hintIndexArr[index]] === "_") {
+        hint = setCharAt(
+          hint,
+          hintIndexArr[index],
+          correct_answer[hintIndexArr[index]]
+        );
       }
+
+      const indexToRemove = hintIndexArr.indexOf(hintIndexArr[index]);
+      hintIndexArr.splice(indexToRemove, 1);
+
       msg.channel.send(`Hint: ${parsedHint(hint)}`);
-      count++;
     } else {
-      msg.channel.send(`Time's up! Answer is ${correct_answer}`);
-      clearInterval(refreshIntervalId);
+      msg.channel.send(`No more hints!`);
     }
   };
 
@@ -50,10 +69,14 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
 
     if (msg.author.bot) {
     }
+    // Give hints
+    if (msg.content === "hint") {
+      giveHints(correct_answer);
+    }
     // Skip
     if (msg.content === "skip") {
-      msg.channel.send("Question skipped!");
-      clearInterval(refreshIntervalId);
+      clearInterval(cooldownIntervalId);
+      msg.channel.send(`Question skipped! Answer was: ${correct_answer}`);
       solved = true;
 
       return resolve("Done");
@@ -63,14 +86,25 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
       String(msg.content).toLowerCase() === String(correct_answer).toLowerCase()
     ) {
       addPlayerScore(msg.author.username);
+      clearInterval(cooldownIntervalId);
       msg.channel.send(`${msg.author.username} got it correct!`);
-      clearInterval(refreshIntervalId);
       solved = true;
       return resolve("Done");
     }
   });
 
-  refreshIntervalId = setInterval(() => giveHints(correct_answer), 5000);
+  //   1 minute to solve
+  setInterval(() => {
+    //   clear interval for cooldown
+    clearInterval(cooldownIntervalId);
+    msg.channel.send(`Times up! Answer is ${correct_answer}`);
+    return resolve("done");
+  }, 60000);
+  //   Countdown timer
+  const cooldownIntervalId = setInterval(() => {
+    timeLeft -= 10;
+    msg.channel.send(`Time left : ${timeLeft} seconds`);
+  }, 10000);
 };
 
 module.exports = {

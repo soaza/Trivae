@@ -5,6 +5,8 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const player = require("./player");
 
+let gameStarted = false;
+
 const parseHTML = (htmlStr) => {
   return he.decode(String(htmlStr));
 };
@@ -101,17 +103,19 @@ client.on("ready", () => {
 client.on("message", async (msg) => {
   if (msg.author.bot) return;
   if (msg.content === "/start") {
-    //   after the round
     msg.channel.send("Please choose a category");
     msg.channel.send(makeCategoriesString());
     client.on("message", async (msg) => {
       if (msg.author.bot) return;
-      if (parseInt(String(msg.content)) < 25) {
+      if (parseInt(String(msg.content)) < 25 && !gameStarted) {
+        gameStarted = true;
         initialiseCategory(parseInt(String(msg.content)));
       }
     });
 
     const initialiseCategory = async (category) => {
+      //   after the round
+
       const scoreboard = await startGame(msg, category);
       let scoreboardReply = "```End of Round \n ";
       for (var player of Object.keys(scoreboard)) {
@@ -119,6 +123,7 @@ client.on("message", async (msg) => {
       }
       scoreboardReply += "```";
       msg.channel.send(scoreboardReply);
+      gameStarted = false;
     };
   }
 });
