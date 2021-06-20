@@ -2,22 +2,14 @@ const dotenv = require("dotenv").config();
 const fetch = require("node-fetch");
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const player = require("./player");
 
 const createQuestionSession = async (msg, questionSession) => {
   return new Promise((resolve, reject) => {
-    const { question, correct_answer, incorrect_answers } = questionSession;
+    const { question, correct_answer } = questionSession;
     msg.channel.send(String(question));
-    msg.channel.send(String(incorrect_answers));
 
-    client.on("message", async (msg) => {
-      if (msg.content === correct_answer) {
-        if (msg.author.bot) {
-        } else {
-          msg.channel.send("Correct!");
-          return resolve("Done");
-        }
-      }
-    });
+    player.playerResponse(client, correct_answer, msg, resolve);
   });
 };
 
