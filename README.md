@@ -1,0 +1,2 @@
+# Trivae
+Discord trivia bot
