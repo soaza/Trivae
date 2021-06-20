@@ -1,13 +1,21 @@
+const he = require("he");
 const dotenv = require("dotenv").config();
 const fetch = require("node-fetch");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const player = require("./player");
 
+const parseQuestion = (question) => {
+  return he.decode(String(question));
+};
+
 const createQuestionSession = async (msg, questionSession) => {
   return new Promise((resolve, reject) => {
     const { question, correct_answer } = questionSession;
-    msg.channel.send(String(question));
+    msg.channel.send(parseQuestion(question));
+    msg.channel.send(
+      `*(Number of words: ${String(correct_answer).split(" ").length})*`
+    );
 
     player.playerResponse(client, correct_answer, msg, resolve);
   });
