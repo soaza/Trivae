@@ -1,5 +1,9 @@
-const { time } = require("console");
-const { clearInterval } = require("timers");
+const {
+  time
+} = require("console");
+const {
+  clearInterval
+} = require("timers");
 
 let players = {};
 
@@ -31,7 +35,6 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
   for (var i = 0; i < correct_answer.length; i++) {
     if (correct_answer[i] === " ") blankIndices.push(i);
   }
-  console.log("blank", blankIndices);
   //   we use this array to keep track of un-revealed characters
   let hintIndexArr = Array.from(Array(correct_answer.length).keys());
   //   remove all indices which has underscore
@@ -43,10 +46,8 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
   }
 
   const giveHints = (correct_answer) => {
-    console.log("hintArr", hintIndexArr);
     if (hintIndexArr.length > 0) {
       var index = Math.floor(Math.random() * hintIndexArr.length); //generate new index
-      console.log(index);
       if (hint[hintIndexArr[index]] === "_") {
         hint = setCharAt(
           hint,
@@ -67,8 +68,7 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
   client.on("message", async (msg) => {
     if (solved) return resolve("Done");
 
-    if (msg.author.bot) {
-    }
+    if (msg.author.bot) {}
     // Give hints
     if (msg.content === "hint") {
       giveHints(correct_answer);
