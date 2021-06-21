@@ -157,14 +157,20 @@ const startBot = () => {
         gameStarted = false;
       };
     }
+
     if (msg.content === '/stop') {
       msg.channel.send('Bot killed:(')
         .then(() => {
           client.destroy()
           startBot()
         })
+    }
+
+    if (msg.content === '/help') {
+      msg.channel.send('```/start => To start a game \n/stop => To stop a game```')
 
     }
+
   });
 
   client.login(process.env.TOKEN);
