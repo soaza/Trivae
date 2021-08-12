@@ -2,6 +2,11 @@
 
 A discord bot created for fun, allowing users in the servers to answer trivia questions and rank among themselves their knowledge of random trivias
 
+## Tech Stack
+Discord.JS,Node.JS,Express.JS
+
+Trivia questions from : <a href="https://opentdb.com"> Open Trivia DB</a>
+
 ## How to add the bot to your server
 1) Log in to your Discord on browser
 2) <a href="https://discord.com/login?redirect_to=%2Foauth2%2Fauthorize%3Fclient_id%3D855850720782581761%26scope%3Dbot%2Bapplications.commands">Click this</a>
