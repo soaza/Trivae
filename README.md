@@ -5,6 +5,8 @@ A discord bot created for fun, allowing users in the servers to answer trivia qu
 ## Tech Stack
 Discord.JS,Node.JS,Express.JS
 
+Hosted on: Heroku
+
 Trivia questions from : <a href="https://opentdb.com"> Open Trivia DB</a>
 
 ## How to add the bot to your server
