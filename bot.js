@@ -2,6 +2,7 @@ const he = require("he");
 const dotenv = require("dotenv").config();
 const fetch = require("node-fetch");
 const Discord = require("discord.js");
+const keepAlive = require("./server")
 
 const startBot = () => {
 
@@ -175,4 +176,6 @@ const startBot = () => {
 
   client.login(process.env.TOKEN);
 }
+
+keepAlive()
 startBot()

@@ -75,6 +75,7 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
     }
     // Skip
     if (msg.content === "skip") {
+      clearInterval(timesUpIntervalId)
       clearInterval(cooldownIntervalId);
       msg.channel.send(`Question skipped! Answer was: ${correct_answer}`);
       solved = true;
@@ -86,6 +87,7 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
       String(msg.content).toLowerCase() === String(correct_answer).toLowerCase()
     ) {
       addPlayerScore(msg.author.username);
+      clearInterval(timesUpIntervalId)
       clearInterval(cooldownIntervalId);
       msg.channel.send(`${msg.author.username} got it correct!`);
       solved = true;
@@ -94,7 +96,7 @@ const playerResponse = (client, correct_answer, msg, resolve) => {
   });
 
   //   1 minute to solve
-  setInterval(() => {
+  const timesUpIntervalId = setInterval(() => {
     //   clear interval for cooldown
     clearInterval(cooldownIntervalId);
     msg.channel.send(`Times up! Answer is ${correct_answer}`);
