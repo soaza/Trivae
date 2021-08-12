@@ -85,6 +85,9 @@ const startBot = () => {
   const startGame = async (msg, category, difficulty) => {
     return new Promise(async (resolve, reject) => {
       msg.channel.send(` You chose *${categories[category - 1]}*`);
+      console.log(`https://opentdb.com/api.php?amount=10&category=${getCategoryMap(
+        category
+      )}&difficulty=${getDifficultyMap(difficulty)}`)
       await fetch(
           `https://opentdb.com/api.php?amount=10&category=${getCategoryMap(
         category
