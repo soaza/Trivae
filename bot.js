@@ -75,11 +75,11 @@ const startBot = () => {
   };
 
   const getDifficultyMap = (difficulty) => {
-    if (difficulty === 1) {
+    if (parseInt(difficulty) === 1) {
       return ''
     }
     const difficulties = ['easy', 'medium', 'hard']
-    return difficulties[difficulty - 2]
+    return difficulties[parseInt(difficulty) - 2]
   }
 
   const startGame = async (msg, category, difficulty) => {
