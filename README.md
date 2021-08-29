@@ -20,6 +20,7 @@ Trivia questions from : <a href="https://opentdb.com"> Open Trivia DB</a>
 3) Add the bot to your server of choice!
 
 ## Using the bot
+(Currently stopped cuz I dont want to pay for dynos on heroku lol)
 
 `/help` : provides commands to use
 `/start`: starts the bot
