@@ -9,7 +9,9 @@ Hosted on: Heroku
 
 Trivia questions from : <a href="https://opentdb.com"> Open Trivia DB</a>
 
-## How to add the bot to your server
+## How to add the bot to your server(On hold)
+(Currently stopped cuz I dont want to pay for dynos on heroku lol)
+
 1) Log in to your Discord on browser
 2) <a href="https://discord.com/login?redirect_to=%2Foauth2%2Fauthorize%3Fclient_id%3D855850720782581761%26scope%3Dbot%2Bapplications.commands">Click this</a>
 
@@ -20,7 +22,6 @@ Trivia questions from : <a href="https://opentdb.com"> Open Trivia DB</a>
 3) Add the bot to your server of choice!
 
 ## Using the bot
-(Currently stopped cuz I dont want to pay for dynos on heroku lol)
 
 `/help` : provides commands to use
 `/start`: starts the bot
